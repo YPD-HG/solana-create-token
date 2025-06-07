@@ -29,7 +29,9 @@ Tokens live in **associated token accounts**, not directly in wallets.
 ---
 For OutPut:
 ReceiverTokenAccount address : 5cwHEakPvZ6c7TsBDPCSXqjHVinLGCYX95WAcsg7vuoj
+
 Creator token address : 9gXzjCdvtCRMTR6EG1xnaxERuq9iEvwjTSGiZCKco6fb
+
 mintWallet address : J2nRi94uyykerZR9ZWaK5QGTUAvLzEkyfFJym85LgXbh
 
 
