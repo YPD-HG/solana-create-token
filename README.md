@@ -27,6 +27,11 @@ This project demonstrates how to create a new SPL token mint on a local Solana c
 Tokens live in **associated token accounts**, not directly in wallets.
 
 ---
+For OutPut:
+ReceiverTokenAccount address : 5cwHEakPvZ6c7TsBDPCSXqjHVinLGCYX95WAcsg7vuoj
+Creator token address : 9gXzjCdvtCRMTR6EG1xnaxERuq9iEvwjTSGiZCKco6fb
+mintWallet address : J2nRi94uyykerZR9ZWaK5QGTUAvLzEkyfFJym85LgXbh
+
 
 ![Screen Shot 2025-06-07 at 10 52 47 PM](https://github.com/user-attachments/assets/ed1fdef6-57af-4e45-97e9-00c2909ae0db)
 
