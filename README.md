@@ -28,6 +28,9 @@ Tokens live in **associated token accounts**, not directly in wallets.
 
 ---
 
+![Screen Shot 2025-06-07 at 10 52 47 PM](https://github.com/user-attachments/assets/ed1fdef6-57af-4e45-97e9-00c2909ae0db)
+
+
 ## Usage
 
 1. Install dependencies:
