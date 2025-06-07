@@ -61,12 +61,16 @@ var transferTokens = function (tokenAddress, mintWallet, receiver) { return __aw
                 return [4 /*yield*/, (0, spl_token_1.getOrCreateAssociatedTokenAccount)(connection, mintWallet, tokenAddress, mintWallet.publicKey)];
             case 1:
                 mintTokenAccount = _a.sent();
+                // A Token Account or Wallet is created for the Token.
                 return [4 /*yield*/, (0, spl_token_1.mintTo)(connection, mintWallet, tokenAddress, mintTokenAccount.address, mintWallet.publicKey, 100000000, [], undefined, spl_token_1.TOKEN_PROGRAM_ID)];
             case 2:
+                // A Token Account or Wallet is created for the Token.
                 _a.sent();
                 return [4 /*yield*/, (0, spl_token_1.getOrCreateAssociatedTokenAccount)(connection, mintWallet, tokenAddress, receiver, undefined, undefined, undefined, spl_token_1.TOKEN_PROGRAM_ID)];
             case 3:
                 receiverTokenAccount = _a.sent();
+                // Creates a wallet for the receiver (to hold this token).
+                // Now the Token will be transferred from Owner to the receiver.
                 console.log("ReceiverTokenAccount address : ".concat(receiverTokenAccount.address));
                 transaction = new web3_js_1.Transaction().add((0, spl_token_1.createTransferInstruction)(mintTokenAccount.address, receiverTokenAccount.address, mintWallet.publicKey, 100000000, [], spl_token_1.TOKEN_PROGRAM_ID));
                 return [4 /*yield*/, (0, web3_js_1.sendAndConfirmTransaction)(connection, transaction, [mintWallet], { commitment: "confirmed" })];
@@ -77,30 +81,27 @@ var transferTokens = function (tokenAddress, mintWallet, receiver) { return __aw
     });
 }); };
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var mintWallet, creatorTokenAddress;
+    var mintWallet, connection, creatorTokenAddress;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, web3_js_1.Keypair.generate()];
             case 1:
                 mintWallet = _a.sent();
-                // Lets add some balance into the Wallet, becoz to create token, it need to pay some transaction fees.
+                connection = new web3_js_1.Connection("http://127.0.0.1:8899", "confirmed");
+                // Airdrop some SOL to the mint wallet to cover transaction fees for minting and transfers.
                 return [4 /*yield*/, (0, airdrop_1.airdrop)(mintWallet.publicKey, 5)];
             case 2:
-                // Lets add some balance into the Wallet, becoz to create token, it need to pay some transaction fees.
-                _a.sent();
-                return [4 /*yield*/, (0, airdrop_1.airdrop)(new web3_js_1.PublicKey("4658ZW5WaNCps9rPWauL5TBk94SwMMKTk3yWK8PzXufG"), 5)];
-            case 3:
+                // Airdrop some SOL to the mint wallet to cover transaction fees for minting and transfers.
                 _a.sent();
                 return [4 /*yield*/, createTheMint(mintWallet)];
-            case 4:
+            case 3:
                 creatorTokenAddress = _a.sent();
-                // We now have created a mint, we also have the public address of that mint,
-                // And we already have the public/private key for that mint wallet, being authority, can create more supply of this created token.
+                // Mint tokens and transfer them to another wallet.
                 return [4 /*yield*/, transferTokens(creatorTokenAddress, mintWallet, new web3_js_1.PublicKey("4658ZW5WaNCps9rPWauL5TBk94SwMMKTk3yWK8PzXufG"))];
-            case 5:
-                // We now have created a mint, we also have the public address of that mint,
-                // And we already have the public/private key for that mint wallet, being authority, can create more supply of this created token.
+            case 4:
+                // Mint tokens and transfer them to another wallet.
                 _a.sent();
+                // Log important addresses for inspection or testing.
                 console.log("Creator token address : ".concat(creatorTokenAddress));
                 console.log("mintWallet address : ".concat(mintWallet.publicKey));
                 return [2 /*return*/];

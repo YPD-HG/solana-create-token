@@ -13,10 +13,14 @@ const transferTokens = async (tokenAddress: PublicKey, mintWallet: Keypair, rece
     // const creatorToken = new Token(connection, tokenAddress, TOKEN_PROGRAM_ID, mintWallet);
 
     const mintTokenAccount = await getOrCreateAssociatedTokenAccount(connection, mintWallet, tokenAddress, mintWallet.publicKey);
-
+    // A Token Account or Wallet is created for the Token.
     await mintTo(connection, mintWallet, tokenAddress, mintTokenAccount.address, mintWallet.publicKey, 100000000, [], undefined, TOKEN_PROGRAM_ID);
+    // Mint creates 1 Token for the wallet
 
     const receiverTokenAccount = await getOrCreateAssociatedTokenAccount(connection, mintWallet, tokenAddress, receiver, undefined, undefined, undefined, TOKEN_PROGRAM_ID);
+    // Creates a wallet for the receiver (to hold this token).
+    // Now the Token will be transferred from Owner to the receiver.
+
     console.log(`ReceiverTokenAccount address : ${receiverTokenAccount.address}`);
 
     const transaction = new Transaction().add(
@@ -35,19 +39,23 @@ const transferTokens = async (tokenAddress: PublicKey, mintWallet: Keypair, rece
 }
 
 (async () => {
-    // A mint wallet created
-    // Note that this wallet will have authority to create new token, or create fresh supply of token.
+    // Generate a new Keypair for the mint authority wallet.
+    // This wallet will control minting (i.e., creating new supply) for the token.
+    // Note: `Keypair.generate()` gives a new random wallet every time it's called.
     const mintWallet = await Keypair.generate();
 
-    // Lets add some balance into the Wallet, becoz to create token, it need to pay some transaction fees.
+    // Airdrop some SOL to the mint wallet to cover transaction fees for minting and transfers.
     await airdrop(mintWallet.publicKey, 5);
-    await airdrop(new PublicKey("4658ZW5WaNCps9rPWauL5TBk94SwMMKTk3yWK8PzXufG"), 5)
+
+    // Create a new token mint, using the mintWallet as the mint authority.
+    // This returns the public address of the token mint (i.e., the token itself).
     const creatorTokenAddress = await createTheMint(mintWallet);
-    // We now have created a mint, we also have the public address of that mint,
-    // And we already have the public/private key for that mint wallet, being authority, can create more supply of this created token.
 
-    await transferTokens(creatorTokenAddress, mintWallet, new PublicKey("4658ZW5WaNCps9rPWauL5TBk94SwMMKTk3yWK8PzXufG"))
+    // Mint tokens and transfer them to another wallet.
+    await transferTokens(creatorTokenAddress, mintWallet, new PublicKey("4658ZW5WaNCps9rPWauL5TBk94SwMMKTk3yWK8PzXufG"));
 
+    // Log important addresses for inspection or testing.
     console.log(`Creator token address : ${creatorTokenAddress}`);
     console.log(`mintWallet address : ${mintWallet.publicKey}`);
+
 })()
